@@ -6,5 +6,4 @@ public class TripImage
     public string Url { get; set; }
     public string Caption { get; set; }
     public Guid TripId { get; set; }
-    public Trip Trip { get; set; }
 }
