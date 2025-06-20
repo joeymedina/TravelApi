@@ -3,7 +3,7 @@ using Minio;
 using Minio.DataModel.Args;
 using Travel.Model;
 
-namespace TravelApi.Endpoints;
+namespace Travel.Api.Endpoints;
 
 internal static class TripHandlers
 {

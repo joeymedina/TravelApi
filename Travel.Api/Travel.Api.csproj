@@ -8,11 +8,11 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
-        <PackageReference Include="Minio" Version="6.0.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Travel.Infrastructure\Travel.Infrastructure.csproj" />
       <ProjectReference Include="..\Travel.Model\Travel.Model.csproj" />
     </ItemGroup>
 

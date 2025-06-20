@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Travel.Model;
 
-namespace TravelApi.Endpoints;
+namespace Travel.Api.Endpoints;
 
 internal static class ImageHandlers
 {

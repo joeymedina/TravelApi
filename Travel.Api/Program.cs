@@ -1,19 +1,14 @@
 using Minio;
-using TravelApi;
-using TravelApi.Endpoints;
+using Travel.Api;
+using Travel.Api.Endpoints;
+using Travel.Infrastructure;
+using Travel.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var endpoint = @"";
-var accessKey = "";
-var secretKey = "";
-
-builder.Services.AddMinio(configureClient => configureClient
-    .WithEndpoint(endpoint)
-    .WithCredentials(accessKey, secretKey)
-    .Build());
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

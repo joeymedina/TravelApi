@@ -1,6 +1,6 @@
-using TravelApi.Endpoints;
+using Travel.Api.Endpoints;
 
-namespace TravelApi;
+namespace Travel.Api;
 
 public static class BuilderExtensions
 {
