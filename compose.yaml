@@ -1,0 +1,18 @@
+﻿version: "3.9"
+services:
+  db:
+    image: postgres
+    container_name: travel-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: 
+      POSTGRES_PASSWORD: 
+      POSTGRES_DB: travel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+
+

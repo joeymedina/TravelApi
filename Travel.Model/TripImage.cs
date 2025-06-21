@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace Travel.Model;
 
 public class TripImage
@@ -6,4 +8,5 @@ public class TripImage
     public string Url { get; set; }
     public string Caption { get; set; }
     public Guid TripId { get; set; }
+    public Trip Trip { get; set; }   // Navigation property
 }

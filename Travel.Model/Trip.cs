@@ -8,5 +8,5 @@ public class Trip
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Story { get; set; } // Could be Markdown or HTML
-    public ICollection<TripImage> Images { get; set; }
+    public List<TripImage> Images { get; set; } = [];
 }

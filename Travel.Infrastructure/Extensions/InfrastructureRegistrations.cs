@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
@@ -15,6 +16,9 @@ public static class InfrastructureRegistrations
             .WithEndpoint(endpoint)
             .WithCredentials(accessKey, secretKey)
             .Build());
+
+        services.AddDbContext<TripsDbContext>(options => options.UseNpgsql("Server=localhost;Port=5433;User Id=;Password=;Database=travel"));
+        
         return services;
     }
 }
