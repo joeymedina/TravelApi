@@ -9,6 +9,8 @@ public static class DomainRegistrations
     public static IServiceCollection AddDomain(this IServiceCollection services)
     {
         services.AddTransient<ITripsUseCase, TripsUseCase>();
+        services.AddTransient<ITripsImageUseCase, TripsImageUseCase>();
+
         return services;
     }
 }

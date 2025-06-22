@@ -1,4 +1,7 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Travel.Api.DTOs;
+using Travel.Domain.Interfaces;
 using Travel.Model;
 
 namespace Travel.Api.Endpoints;
@@ -30,35 +33,49 @@ internal static class ImageHandlers
         }
     ];
 
-    public static List<TripImage> GetImages(string id)
+    public static async Task<List<TripImage>?> GetImages(string id, ITripsImageUseCase tripsImageUseCase)
     {
-        var result = _tripImages.Where(x => x.TripId == Guid.Parse(id)).ToList();
-        return result;
+        return await tripsImageUseCase.GetTripImages(id);
+        // var result = _tripImages.Where(x => x.TripId == Guid.Parse(id)).ToList();
+        // return result;
     }
 
-    public static TripImage? GetImage(string tripId, string id)
+    public static async Task<TripImage?> GetImage(string tripId, string id, ITripsImageUseCase tripsImageUseCase)
     {
-        return  _tripImages.FirstOrDefault(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
+        // return  _tripImages.FirstOrDefault(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
+        return await tripsImageUseCase.GetTripImage(tripId, id);
     }
 
-    public static Created<TripImage> PostImage(TripImage tripImage)
+    public static async Task<Created<TripImage>> PostImage(string tripId, CreateTripImageDto tripImageDto, IMapper mapper, ITripsImageUseCase tripsImageUseCase)
     {
-        _tripImages.Add(tripImage);
-        return TypedResults.Created("", tripImage);
+        var tripImage = mapper.Map<TripImage>(tripImageDto);  
+        tripImage.TripId = Guid.Parse(tripId);
+        await tripsImageUseCase.CreateTripImage(tripImage);
+        return TypedResults.Created($"api/trips/{tripId}/images/{tripImage.Id}", tripImage);
+        // _tripImages.Add(tripImage);
+        // return TypedResults.Created("", tripImage);
     }
-    public static Created<TripImage> PutImage(string tripId, string id, TripImage tripImage)
+    public static async Task<IResult> PatchImage(string tripId, string id, PatchTripImageDto tripImageDto, IMapper mapper, ITripsImageUseCase tripsImageUseCase)
     {
-        DeleteTripImage(tripId, id);
-        _tripImages.Add(tripImage);
-        return TypedResults.Created("",tripImage);
+        var existingTripImage = await tripsImageUseCase.GetTripImage(tripId, id);
+        if (existingTripImage == null)
+            return Results.NotFound();
+
+        mapper.Map(tripImageDto, existingTripImage); 
+        await tripsImageUseCase.UpdateTripImage(existingTripImage);
+        return Results.NoContent();
+        // DeleteTripImage(tripId, id);
+        // _tripImages.Add(tripImage);
+        // return TypedResults.Created("",tripImage);
     }
     
-    public static void DeleteTripImage(string tripId, string id)
+    public static void DeleteTripImage(string tripId, string id, ITripsImageUseCase tripImageUseCase)
     {
-        var image = GetImage(tripId, id);
-        if (image != null)
-        {
-            _tripImages.Remove(image);
-        }
+        tripImageUseCase.DeleteTripImage(id);
+        // var image = GetImage(tripId, id);
+        // if (image != null)
+        // {
+        //     _tripImages.Remove(image);
+        // }
     }
 }

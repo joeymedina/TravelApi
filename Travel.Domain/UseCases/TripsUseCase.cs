@@ -3,29 +3,29 @@ using Travel.Model;
 
 namespace Travel.Domain.UseCases;
 
-public class TripsUseCase(ITravelRepository travelRepository) : ITripsUseCase
+public class TripsUseCase(ITripsRepository tripsRepository) : ITripsUseCase
 {
     public async Task<Trip?> GetTrip(string id)
     {
-        return await travelRepository.GetTrip(id);
+        return await tripsRepository.GetTrip(id);
     }
 
     public List<Trip> GetTrips()
     {
-        return travelRepository.GetTrips();
+        return tripsRepository.GetTrips();
     }
 
     public async Task CreateTrip(Trip trip)
     {
-        await travelRepository.CreateTrip(trip);
+        await tripsRepository.CreateTrip(trip);
     }
     public void DeleteTrip(string id)
     {
-        travelRepository.DeleteTrip(id);
+        tripsRepository.DeleteTrip(id);
     }
 
     public async Task UpdateTrip(Trip trip)
     {
-        await travelRepository.UpdateTrip(trip);
+        await tripsRepository.UpdateTrip(trip);
     }
 }

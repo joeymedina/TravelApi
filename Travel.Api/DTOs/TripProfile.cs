@@ -7,7 +7,7 @@ public class TripProfile : Profile
     public TripProfile()
     {
         CreateMap<CreateTripDto, Trip>();
-
+        CreateMap<CreateTripImageDto, TripImage>();
         CreateMap<PatchTripDto, Trip>()
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) =>
             {
@@ -20,5 +20,21 @@ public class TripProfile : Profile
 
                 return true;
             }));
+        
+        CreateMap<PatchTripImageDto, TripImage>()
+            .ForAllMembers(opt =>
+                opt.Condition((src, dest, srcMember, destMember, context) =>
+                {
+                    if (srcMember == null)
+                        return false;
+
+                    if (srcMember is Guid guid && guid == Guid.Empty)
+                        return false;
+
+                    if (srcMember is DateTime dt && dt == DateTime.MinValue)
+                        return false;
+
+                    return true;
+                }));
     }
 }

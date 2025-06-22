@@ -50,12 +50,12 @@ public static class BuilderExtensions
             .WithName("GetImage")
             .WithOpenApi();
         
-        app.MapPost("api/trip/{id}/images", ImageHandlers.PostImage)
+        app.MapPost("api/trip/{tripId}/images", ImageHandlers.PostImage)
             .WithName("PostImage")
             .WithOpenApi();
         
-        app.MapPut("api/trips/{tripId}/images/{id}", ImageHandlers.PutImage)
-            .WithName("PutImage")
+        app.MapPatch("api/trips/{tripId}/images/{id}", ImageHandlers.PatchImage)
+            .WithName("PatchImage")
             .WithOpenApi();
         
         app.MapDelete("api/trips/{tripId}/images/{id}", ImageHandlers.DeleteTripImage)

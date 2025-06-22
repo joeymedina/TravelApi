@@ -4,10 +4,10 @@ using Travel.Model;
 
 namespace Travel.Infrastructure.Repositories;
 
-public class TravelRepository : ITravelRepository
+public class TripsRepository : ITripsRepository
 {
     TripsDbContext _context;
-    public TravelRepository(TripsDbContext context)
+    public TripsRepository(TripsDbContext context)
     {
         _context = context;
     }

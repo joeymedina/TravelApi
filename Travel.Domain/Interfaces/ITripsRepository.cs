@@ -2,7 +2,7 @@ using Travel.Model;
 
 namespace Travel.Domain.Interfaces;
 
-public interface ITravelRepository
+public interface ITripsRepository
 {
     public Task<Trip?> GetTrip(string id);
     public List<Trip> GetTrips();
