@@ -1,6 +1,8 @@
+using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Minio;
-using Minio.DataModel.Args;
+using Travel.Api.DTOs;
+using Travel.Domain.Interfaces;
 using Travel.Model;
 
 namespace Travel.Api.Endpoints;
@@ -40,37 +42,52 @@ internal static class TripHandlers
         }
     }
 
-    public static List<Trip> GetTrips()
+    public static List<Trip> GetTrips(ITripsUseCase tripsUseCase)
     {
-        return _trips;
+        // return _trips;
+        return tripsUseCase.GetTrips();
     }
     
-    public static Trip? GetTrip(string id)
+    public static async Task<Trip?> GetTrip(string id, ITripsUseCase tripsUseCase)
     {
+        return await tripsUseCase.GetTrip(id);
         return _trips.FirstOrDefault(x => x.Id.ToString().Equals(id, StringComparison.OrdinalIgnoreCase));
     }
 
-    public static Created<Trip> PutTrip(string id, Trip trip)
+    public static async Task<Created<Trip>> PutTrip(string id, Trip trip, ITripsUseCase tripsUseCase)
     {
-        var trip1 = GetTrip(id);
+        var trip1 = await tripsUseCase.GetTrip(id);
         _trips.Remove(trip1);
         _trips.Add(trip);
         return TypedResults.Created("",trip);
     }
-    public static Created<Trip> PostTrip(Trip trip)
+
+    public static async Task<IResult> PatchTrip(string id, PatchTripDto dto, IMapper mapper, ITripsUseCase tripsUseCase)
     {
-        _trips.Add(trip);
-        return TypedResults.Created("",trip);
+        var existingTrip = await tripsUseCase.GetTrip(id);
+        if (existingTrip == null)
+            return Results.NotFound();
+
+        mapper.Map(dto, existingTrip); 
+        await tripsUseCase.UpdateTrip(existingTrip);
+        return Results.NoContent();
+    }
+    public static async Task<Created<Trip>> PostTrip(CreateTripDto tripDto, IMapper mapper, ITripsUseCase tripsUseCase)
+    {
+        var trip = mapper.Map<Trip>(tripDto);
+        await tripsUseCase.CreateTrip(trip);
+        return TypedResults.Created($"api/trips/{trip.Id}", trip);
+        // _trips.Add(trip);
+        // return TypedResults.Created("",trip);
     }
 
-    public static void DeleteTrip(string id)
+    public static void DeleteTrip(string id, ITripsUseCase tripsUseCase)
     {
-        var trip = GetTrip(id);
-        if (trip != null)
-        {
-            _trips.Remove(trip);
-        }
+        tripsUseCase.DeleteTrip(id);
+        // var trip = await tripsUseCase.GetTrip(id);
+        // if (trip != null)
+        // {
+        //     _trips.Remove(trip);
+        // }
     }
-    
-    
 }

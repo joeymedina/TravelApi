@@ -1,7 +1,8 @@
-namespace Travel.Infrastructure;
 using Bogus;
-using Travel.Model;
 using Microsoft.EntityFrameworkCore;
+using Travel.Model;
+
+namespace Travel.Infrastructure.Context;
 
 public static class TripsSeeder
 {

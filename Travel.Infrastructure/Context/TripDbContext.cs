@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Travel.Model;
 
-namespace Travel.Infrastructure;
+namespace Travel.Infrastructure.Context;
 
 public class TripsDbContext : DbContext
 {

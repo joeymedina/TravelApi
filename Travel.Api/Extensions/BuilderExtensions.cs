@@ -19,10 +19,15 @@ public static class BuilderExtensions
         app.MapPost("api/trips", TripHandlers.PostTrip)
             .WithName("CreateTrip")
             .WithOpenApi();
-        app.MapPut("api/trips/{id}", TripHandlers.PutTrip)
-            .WithName("UpdateTrip")
+        
+        // app.MapPut("api/trips/{id}", TripHandlers.PutTrip)
+        //     .WithName("UpdateTrip")
+        //     .WithOpenApi();
+        
+        app.MapPatch("api/trips/{id}", TripHandlers.PatchTrip)
+            .WithName("PatchTrip")
             .WithOpenApi();
-
+        
         app.MapDelete("api/trips/{id}", TripHandlers.DeleteTrip)
             .WithName("DeleteTrip")
             .WithOpenApi();
