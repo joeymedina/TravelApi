@@ -18,6 +18,7 @@ public static class InfrastructureRegistrations
         services.AddMinio(configureClient => configureClient
             .WithEndpoint(minioEndpoint)
             .WithCredentials(minioAccessKey, minioSecretKey)
+            .WithSSL(false)
             .Build());
 
         var postgresUser = configuration["Postgres:User"];
@@ -26,6 +27,7 @@ public static class InfrastructureRegistrations
         services.AddDbContext<TripsDbContext>(options => options.UseNpgsql($"Server=localhost;Port=5433;User Id={postgresUser};Password={postgresPassword};Database={postgresDatabase}"));
         services.AddScoped<ITripsRepository, TripsRepository>();
         services.AddScoped<ITripsImageRepository, TripsImageRepository>();
+        services.AddTransient<IMinioRepository, MinioRepository>();
 
         return services;
     }

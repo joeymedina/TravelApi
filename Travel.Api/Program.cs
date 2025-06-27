@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 using Travel.Api;
 using Travel.Api.DTOs;
 using Travel.Api.Middleware;
@@ -12,6 +14,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddDomain();
 builder.Services.AddAutoMapper(typeof(TripProfile));
+builder.Services.Configure<FormOptions>(options =>
+{
+    options.MultipartBodyLengthLimit = 268435456; // 256 MB limit
+});
 
 var app = builder.Build();
 

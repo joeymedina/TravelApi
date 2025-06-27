@@ -10,7 +10,7 @@ public static class DomainRegistrations
     {
         services.AddTransient<ITripsUseCase, TripsUseCase>();
         services.AddTransient<ITripsImageUseCase, TripsImageUseCase>();
-
+        services.AddTransient<IMinioUseCase, MinioUseCase>();
         return services;
     }
 }

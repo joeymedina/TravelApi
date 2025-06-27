@@ -1,8 +1,13 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Minio;
+using Minio.DataModel.Args;
+using Minio.DataModel.Response;
 using Travel.Api.DTOs;
 using Travel.Domain.Interfaces;
 using Travel.Model;
+
 
 namespace Travel.Api.Endpoints;
 
@@ -45,7 +50,7 @@ internal static class ImageHandlers
         // return  _tripImages.FirstOrDefault(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
         return await tripsImageUseCase.GetTripImage(tripId, id);
     }
-
+    
     public static async Task<Created<TripImage>> PostImage(string tripId, CreateTripImageDto tripImageDto, IMapper mapper, ITripsImageUseCase tripsImageUseCase)
     {
         var tripImage = mapper.Map<TripImage>(tripImageDto);  
@@ -77,5 +82,35 @@ internal static class ImageHandlers
         // {
         //     _tripImages.Remove(image);
         // }
+    }
+    
+    public static async Task<IResult> UploadImage([FromForm(Name = "file")] IFormFile file, IMinioUseCase minioUseCase)
+    {
+        if (file == null || file.Length == 0)
+            return Results.BadRequest("No file uploaded.");
+
+        var bucketName = "uploads";
+        var objectName = file.FileName;
+
+        var exists = await minioUseCase.BucketExistsAsync(bucketName);
+        if (!exists)
+        {
+            await minioUseCase.MakeBucketAsync(bucketName);
+        }
+
+        await using var stream = file.OpenReadStream();
+        await minioUseCase.PutObjectStreamAsync(bucketName, objectName, stream, file);
+
+        return Results.Ok($"Uploaded {objectName} to {bucketName}");
+    }
+    public static async Task<PutObjectResponse> UploadLocal(IMinioUseCase minioUseCase)
+    {
+        // debug
+        //var list = await minioUseCase.ListBucketsAsync();
+        const string bucketName = "tripimages";
+        const string objectName = "island.jpeg";
+        const string filePath = "/Users/joeymedina/minio/photos/island.jpeg";
+        const string contentType = "image/jpeg";
+        return  await minioUseCase.PutObjectLocalAsync(bucketName, objectName, filePath, contentType);
     }
 }
