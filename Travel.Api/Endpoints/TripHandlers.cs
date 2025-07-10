@@ -42,49 +42,50 @@ internal static class TripHandlers
         }
     }
 
-    public static List<Trip> GetTrips(ITripsUseCase tripsUseCase)
+    public static List<Trip> GetTrips(ITripsService tripsService)
     {
         // return _trips;
-        return tripsUseCase.GetTrips();
+        return tripsService.GetTrips();
     }
     
-    public static async Task<Trip?> GetTrip(string id, ITripsUseCase tripsUseCase)
+    public static async Task<Trip?> GetTrip(string id, ITripsService tripsService)
     {
-        return await tripsUseCase.GetTrip(id);
+        return await tripsService.GetTrip(id);
         return _trips.FirstOrDefault(x => x.Id.ToString().Equals(id, StringComparison.OrdinalIgnoreCase));
     }
 
-    public static async Task<Created<Trip>> PutTrip(string id, Trip trip, ITripsUseCase tripsUseCase)
+    public static async Task<Created<Trip>> PutTrip(string id, Trip trip, ITripsService tripsService)
     {
-        var trip1 = await tripsUseCase.GetTrip(id);
+        var trip1 = await tripsService.GetTrip(id);
         _trips.Remove(trip1);
         _trips.Add(trip);
         return TypedResults.Created("",trip);
     }
 
-    public static async Task<IResult> PatchTrip(string id, PatchTripDto dto, IMapper mapper, ITripsUseCase tripsUseCase)
+    public static async Task<IResult> PatchTrip(string id, PatchTripDto dto, IMapper mapper, ITripsService tripsService)
     {
-        var existingTrip = await tripsUseCase.GetTrip(id);
+        var existingTrip = await tripsService.GetTrip(id);
         if (existingTrip == null)
             return Results.NotFound();
 
         mapper.Map(dto, existingTrip); 
-        await tripsUseCase.UpdateTrip(existingTrip);
+        await tripsService.UpdateTrip(existingTrip);
         return Results.NoContent();
     }
-    public static async Task<Created<Trip>> PostTrip(CreateTripDto tripDto, IMapper mapper, ITripsUseCase tripsUseCase)
+    public static async Task<Created<Trip>> PostTrip(CreateTripDto tripDto, IMapper mapper, ITripsService tripsService)
     {
         var trip = mapper.Map<Trip>(tripDto);
-        await tripsUseCase.CreateTrip(trip);
+        await tripsService.CreateTrip(trip);
         return TypedResults.Created($"api/trips/{trip.Id}", trip);
         // _trips.Add(trip);
         // return TypedResults.Created("",trip);
     }
 
-    public static void DeleteTrip(string id, ITripsUseCase tripsUseCase)
+    public static void DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
     {
-        tripsUseCase.DeleteTrip(id);
-        // var trip = await tripsUseCase.GetTrip(id);
+        imageService.DeleteTripImages(id);
+        tripsService.DeleteTrip(id);
+        // var trip = await tripsService.GetTrip(id);
         // if (trip != null)
         // {
         //     _trips.Remove(trip);

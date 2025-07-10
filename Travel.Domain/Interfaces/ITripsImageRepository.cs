@@ -8,6 +8,7 @@ public interface ITripsImageRepository
     public Task<TripImage?> GetTripImage(string tripId, string id);
     public Task CreateTripImage(TripImage tripImage);
     public void DeleteTripImage(string id);
+    public void DeleteTripImage(Guid id);
     public Task UpdateTripImage(TripImage trip);
 
 }

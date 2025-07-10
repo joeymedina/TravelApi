@@ -24,7 +24,7 @@ public static class InfrastructureRegistrations
         var postgresUser = configuration["Postgres:User"];
         var postgresPassword = configuration["Postgres:Password"];
         var postgresDatabase = configuration["Postgres:Database"];
-        services.AddDbContext<TripsDbContext>(options => options.UseNpgsql($"Server=localhost;Port=5433;User Id={postgresUser};Password={postgresPassword};Database={postgresDatabase}"));
+        services.AddDbContext<TripsDbContext>(options => options.UseNpgsql($"Server=localhost;Port=5433;User Id={postgresUser};Password={postgresPassword};Database={postgresDatabase}"),ServiceLifetime.Transient);
         services.AddScoped<ITripsRepository, TripsRepository>();
         services.AddScoped<ITripsImageRepository, TripsImageRepository>();
         services.AddTransient<IMinioRepository, MinioRepository>();

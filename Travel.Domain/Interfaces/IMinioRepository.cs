@@ -14,5 +14,7 @@ public interface IMinioRepository
     public Task<PutObjectResponse> PutObjectLocalAsync(string bucketName, string objectName, string filePath,
         string contentType = "image/jpeg");
     public Task<ListAllMyBucketsResult> ListBucketsAsync();
-    
+    public Task SetBucketPolicyToPublicAsync(string bucketName);
+
+
 }

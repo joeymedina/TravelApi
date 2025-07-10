@@ -38,45 +38,45 @@ internal static class ImageHandlers
         }
     ];
 
-    public static async Task<List<TripImage>?> GetImages(string id, ITripsImageUseCase tripsImageUseCase)
+    public static async Task<List<TripImage>?> GetImages(string id, ITripsImageService tripsImageService)
     {
-        return await tripsImageUseCase.GetTripImages(id);
+        return await tripsImageService.GetTripImages(id);
         // var result = _tripImages.Where(x => x.TripId == Guid.Parse(id)).ToList();
         // return result;
     }
 
-    public static async Task<TripImage?> GetImage(string tripId, string id, ITripsImageUseCase tripsImageUseCase)
+    public static async Task<TripImage?> GetImage(string tripId, string id, ITripsImageService tripsImageService)
     {
         // return  _tripImages.FirstOrDefault(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
-        return await tripsImageUseCase.GetTripImage(tripId, id);
+        return await tripsImageService.GetTripImage(tripId, id);
     }
     
-    public static async Task<Created<TripImage>> PostImage(string tripId, CreateTripImageDto tripImageDto, IMapper mapper, ITripsImageUseCase tripsImageUseCase)
+    public static async Task<Created<TripImage>> PostImage(string tripId, CreateTripImageDto tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
     {
         var tripImage = mapper.Map<TripImage>(tripImageDto);  
         tripImage.TripId = Guid.Parse(tripId);
-        await tripsImageUseCase.CreateTripImage(tripImage);
+        await tripsImageService.CreateTripImage(tripImage);
         return TypedResults.Created($"api/trips/{tripId}/images/{tripImage.Id}", tripImage);
         // _tripImages.Add(tripImage);
         // return TypedResults.Created("", tripImage);
     }
-    public static async Task<IResult> PatchImage(string tripId, string id, PatchTripImageDto tripImageDto, IMapper mapper, ITripsImageUseCase tripsImageUseCase)
+    public static async Task<IResult> PatchImage(string tripId, string id, PatchTripImageDto tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
     {
-        var existingTripImage = await tripsImageUseCase.GetTripImage(tripId, id);
+        var existingTripImage = await tripsImageService.GetTripImage(tripId, id);
         if (existingTripImage == null)
             return Results.NotFound();
 
         mapper.Map(tripImageDto, existingTripImage); 
-        await tripsImageUseCase.UpdateTripImage(existingTripImage);
+        await tripsImageService.UpdateTripImage(existingTripImage);
         return Results.NoContent();
         // DeleteTripImage(tripId, id);
         // _tripImages.Add(tripImage);
         // return TypedResults.Created("",tripImage);
     }
     
-    public static void DeleteTripImage(string tripId, string id, ITripsImageUseCase tripImageUseCase)
+    public static void DeleteTripImage(string tripId, string id, ITripsImageService tripImageService)
     {
-        tripImageUseCase.DeleteTripImage(id);
+        tripImageService.DeleteTripImage(id);
         // var image = GetImage(tripId, id);
         // if (image != null)
         // {
@@ -84,33 +84,33 @@ internal static class ImageHandlers
         // }
     }
     
-    public static async Task<IResult> UploadImage([FromForm(Name = "file")] IFormFile file, IMinioUseCase minioUseCase)
+    public static async Task<IResult> UploadImages([FromForm] IFormFileCollection files, string tripId, IUploadTripImageUseCase uploadTripImageUseCase)
     {
-        if (file == null || file.Length == 0)
+        if (files == null || files.Count == 0)
             return Results.BadRequest("No file uploaded.");
+        
+        var uploadedImages = new List<TripImage>();
 
-        var bucketName = "uploads";
-        var objectName = file.FileName;
-
-        var exists = await minioUseCase.BucketExistsAsync(bucketName);
-        if (!exists)
+        foreach (var file in files)
         {
-            await minioUseCase.MakeBucketAsync(bucketName);
+            var objectName = file.FileName;
+            var result = await uploadTripImageUseCase.UploadTripImageAsync(tripId, file);
+            if (result.TripImage != null)
+            {
+                uploadedImages.Add(result.TripImage);
+            }
         }
-
-        await using var stream = file.OpenReadStream();
-        await minioUseCase.PutObjectStreamAsync(bucketName, objectName, stream, file);
-
-        return Results.Ok($"Uploaded {objectName} to {bucketName}");
+        return TypedResults.Created("", uploadedImages);
+        
     }
-    public static async Task<PutObjectResponse> UploadLocal(IMinioUseCase minioUseCase)
+    public static async Task<PutObjectResponse> UploadLocal(IMinioService minioService)
     {
         // debug
-        //var list = await minioUseCase.ListBucketsAsync();
+        //var list = await minioService.ListBucketsAsync();
         const string bucketName = "tripimages";
         const string objectName = "island.jpeg";
         const string filePath = "/Users/joeymedina/minio/photos/island.jpeg";
         const string contentType = "image/jpeg";
-        return  await minioUseCase.PutObjectLocalAsync(bucketName, objectName, filePath, contentType);
+        return  await minioService.PutObjectLocalAsync(bucketName, objectName, filePath, contentType);
     }
 }

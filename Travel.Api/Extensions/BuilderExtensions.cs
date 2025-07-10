@@ -57,10 +57,10 @@ public static class BuilderExtensions
         app.MapPost("api/trip/images", ImageHandlers.UploadLocal)
             .WithName("UploadLocal")
             .WithOpenApi();
-
-        app.MapPost("api/upload", ImageHandlers.UploadImage)
-            .Accepts<IFormFile>("multipart/form-data")
-            .WithName("UploadImage")
+        
+        app.MapPost("api/trip/{tripId}/upload", ImageHandlers.UploadImages)
+            .Accepts<IFormFileCollection>("multipart/form-data")
+            .WithName("UploadImages")
             .WithOpenApi()
             .DisableAntiforgery();
         

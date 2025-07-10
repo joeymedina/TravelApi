@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Travel.Domain.Interfaces;
 using Travel.Infrastructure.Context;
 using Travel.Model;
@@ -16,7 +17,7 @@ public class TripsRepository : ITripsRepository
     {
         var tripId = Guid.Parse(id);
         
-        return await _context.Trips.FindAsync(tripId);
+        return await _context.Trips.Include(t => t.Images).FirstOrDefaultAsync(t => t.Id == tripId);
     }
     
     public List<Trip>  GetTrips()

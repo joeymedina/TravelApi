@@ -11,8 +11,27 @@ services:
       POSTGRES_DB: travel
     volumes:
       - pgdata:/var/lib/postgresql/data
-
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"   # MinIO API
+      - "9001:9001"   # MinIO Console
+    environment:
+      MINIO_ROOT_USER: 
+      MINIO_ROOT_PASSWORD: 
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      
 volumes:
   pgdata:
+  minio_data:
+
 
 
