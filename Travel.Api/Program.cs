@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
