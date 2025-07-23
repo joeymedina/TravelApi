@@ -93,8 +93,13 @@ internal static class ImageHandlers
 
         foreach (var file in files)
         {
-            var objectName = file.FileName;
-            var result = await uploadTripImageUseCase.UploadTripImageAsync(tripId, file);
+            var fileDto = new TripImageUploadDto
+            {
+                FileName = file.FileName,
+                ContentType = file.ContentType,
+                Content = await GetBytesAsync(file)
+            };
+            var result = await uploadTripImageUseCase.UploadTripImageAsync(tripId, fileDto);
             if (result.TripImage != null)
             {
                 uploadedImages.Add(result.TripImage);
@@ -112,5 +117,12 @@ internal static class ImageHandlers
         const string filePath = "/Users/joeymedina/minio/photos/island.jpeg";
         const string contentType = "image/jpeg";
         return  await minioService.PutObjectLocalAsync(bucketName, objectName, filePath, contentType);
+    }
+
+    private static async Task<byte[]> GetBytesAsync(IFormFile file)
+    {
+        using var ms = new MemoryStream();
+        await file.CopyToAsync(ms);
+        return ms.ToArray();
     }
 }

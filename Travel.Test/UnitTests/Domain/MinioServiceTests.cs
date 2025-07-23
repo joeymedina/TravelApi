@@ -1,10 +1,10 @@
 using System.Net;
-using Microsoft.AspNetCore.Http;
 using Minio.DataModel.Response;
 using Minio.DataModel.Result;
 using Moq;
 using Travel.Domain.Interfaces;
 using Travel.Domain.Services;
+using Travel.Model;
 
 namespace Travel.Test.UnitTests.Domain;
 
@@ -59,7 +59,7 @@ public class MinioServiceTests
     public async Task PutObjectStreamAsync_ReturnsRepositoryResult()
     {
         var response = new PutObjectResponse(HttpStatusCode.Accepted, "key", new Dictionary<string,string>(), 0, "contentMd5");
-        var mockFile = new Mock<IFormFile>();
+        var mockFile = new Mock<TripImageUploadDto>();
         var stream = new MemoryStream();
         _mockRepo.Setup(r => r.PutObjectStreamAsync("bucket", "object", stream, mockFile.Object)).ReturnsAsync(response);
         var result = await _service.PutObjectStreamAsync("bucket", "object", stream, mockFile.Object);

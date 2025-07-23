@@ -4,6 +4,7 @@ using Minio.DataModel.Args;
 using Minio.DataModel.Response;
 using Minio.DataModel.Result;
 using Travel.Domain.Interfaces;
+using Travel.Model;
 
 namespace Travel.Infrastructure.Repositories;
 
@@ -46,14 +47,14 @@ public class MinioRepository(IMinioClient minioClient) : IMinioRepository
     }
 
     public async Task<PutObjectResponse> PutObjectStreamAsync(string bucketName, string objectName, Stream stream,
-        IFormFile file)
+        TripImageUploadDto fileDto)
     {
         return await PutObject(new PutObjectArgs()
             .WithBucket(bucketName)
             .WithObject(objectName)
             .WithStreamData(stream)
-            .WithObjectSize(file.Length)
-            .WithContentType(file.ContentType));
+            .WithObjectSize(fileDto.Content.Length)
+            .WithContentType(fileDto.ContentType));
     }
 
     public async Task<PutObjectResponse> PutObjectLocalAsync(string bucketName, string objectName, string filePath,
