@@ -32,7 +32,6 @@ public class TravelWebApplicationFactory : WebApplicationFactory<Program>
     public async Task InitializeMinioAsync()
     {
         await minioContainer.StartAsync();
-        
     }
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)

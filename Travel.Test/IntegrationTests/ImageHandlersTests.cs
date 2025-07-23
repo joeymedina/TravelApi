@@ -27,15 +27,12 @@ public class ImageHandlersTests : TestBase
     [TestMethod]
     public async Task GetImage_ShouldReturnNotFound_WhenImageDoesNotExist()
     {
-        // Arrange
         var nonExistentImageId = "30AAC809-C188-458D-A12E-1AFC92E2FEE3";
         var tripId = "BB68B434-3026-41E1-B253-97BA308D764F";
 
-        // Act
         var response = await client.GetAsync($"/api/trips/{tripId}/images/{nonExistentImageId}");
         var image = await response.Content.ReadFromJsonAsync<TripImage?>();
 
-        // Assert
         Assert.IsNull(image, "Expected to not return an image");
     }
     
