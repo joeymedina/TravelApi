@@ -51,11 +51,11 @@ public class TripsImageServiceTests
     }
 
     [TestMethod]
-    public void DeleteTripImage_CallsRepository()
+    public async Task DeleteTripImage_CallsRepository()
     {
         var imageId = Guid.NewGuidAsString();
-        _service.DeleteTripImage(imageId);
-        _mockRepo.Verify(r => r.DeleteTripImage(imageId), Times.Once);
+        await _service.DeleteTripImageAsync(imageId);
+        _mockRepo.Verify(r => r.DeleteTripImageAsync(imageId), Times.Once);
     }
 
     [TestMethod]
@@ -65,8 +65,8 @@ public class TripsImageServiceTests
         var tripId = Guid.NewGuidAsString();
         var images = new List<TripImage> { new TripImage { Id = Guid.NewGuid() }, new TripImage { Id = Guid.NewGuid() } };
         _mockRepo.Setup(r => r.GetTripImages(tripId)).ReturnsAsync(images);
-        await _service.DeleteTripImages(tripId);
-        _mockRepo.Verify(r => r.DeleteTripImage(It.Is<string>(id => id == images[0].Id.ToString() || id == images[1].Id.ToString())), Times.Exactly(2));
+        await _service.DeleteTripImagesAsync(tripId);
+        _mockRepo.Verify(r => r.DeleteTripImageAsync(It.Is<string>(id => id == images[0].Id.ToString() || id == images[1].Id.ToString())), Times.Exactly(2));
     }
 
     [TestMethod]

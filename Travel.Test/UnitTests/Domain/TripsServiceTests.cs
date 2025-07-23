@@ -56,11 +56,11 @@ public class TripsServiceTests
     }
 
     [TestMethod]
-    public void DeleteTrip_CallsRepository()
+    public async Task DeleteTrip_CallsRepository()
     {
         var id = Guid.NewGuidAsString();
-        _service.DeleteTrip(id);
-        _mockRepo.Verify(r => r.DeleteTrip(id), Times.Once);
+        await _service.DeleteTripAsync(id);
+        _mockRepo.Verify(r => r.DeleteTripAsync(id), Times.Once);
     }
 
     [TestMethod]

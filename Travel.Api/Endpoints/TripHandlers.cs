@@ -82,10 +82,10 @@ internal static class TripHandlers
         // return TypedResults.Created("",trip);
     }
 
-    public static IResult DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
+    public static async Task<IResult> DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
     {
-        imageService.DeleteTripImages(id);
-        tripsService.DeleteTrip(id);
+        await imageService.DeleteTripImagesAsync(id);
+        await tripsService.DeleteTripAsync(id);
         return Results.NoContent();
         // var trip = await tripsService.GetTrip(id);
         // if (trip != null)

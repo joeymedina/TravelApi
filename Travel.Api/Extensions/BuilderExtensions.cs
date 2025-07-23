@@ -29,7 +29,7 @@ public static class BuilderExtensions
             .WithOpenApi();
         
         app.MapDelete("api/trips/{id}", TripHandlers.DeleteTrip)
-            .WithName("DeleteTrip")
+            .WithName("DeleteTripAsync")
             .WithOpenApi();
         
         // app.MapGet("/weatherforecast", TripHandlers.GetWindow)

@@ -7,6 +7,7 @@ using Travel.Model;
 namespace Travel.Test.IntegrationTests;
 
 [TestClass]
+[DoNotParallelize]
 public class ImageHandlersTests : TestBase
 {
     

@@ -42,20 +42,20 @@ public class TripsImageRepository(TripsDbContext context) : ITripsImageRepositor
         await _context.SaveChangesAsync();
     }
 
-    public void DeleteTripImage(Guid id)
+    public async Task DeleteTripImageAsync(Guid id)
     {
         var image = _context.TripImages.Find(id);
         if (image != null)
         {
             _context.TripImages.Remove(image);
         }
-        _context.SaveChanges();   
+        await _context.SaveChangesAsync();   
     }
     
-    public void DeleteTripImage(string id)
+    public async Task DeleteTripImageAsync(string id)
     {
         var tripImageId = Guid.Parse(id);
-        DeleteTripImage(tripImageId);
+        await DeleteTripImageAsync(tripImageId);
     }
     
     public async Task UpdateTripImage(TripImage tripImage)
