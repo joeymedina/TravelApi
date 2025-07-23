@@ -74,9 +74,9 @@ internal static class ImageHandlers
         // return TypedResults.Created("",tripImage);
     }
     
-    public static void DeleteTripImage(string tripId, string id, ITripsImageService tripImageService)
+    public static async Task DeleteTripImage(string tripId, string id, ITripsImageService tripImageService)
     {
-        tripImageService.DeleteTripImage(id);
+        await tripImageService.DeleteTripImageAsync(id);
         // var image = GetImage(tripId, id);
         // if (image != null)
         // {

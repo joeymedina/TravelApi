@@ -25,7 +25,7 @@ public class TripsRepository : ITripsRepository
         return _context.Trips.ToList();
     }
 
-    public void DeleteTrip(string id)
+    public async Task DeleteTripAsync(string id)
     {
         var tripId = Guid.Parse(id);
         var trip = _context.Trips.Find(tripId);
@@ -33,7 +33,8 @@ public class TripsRepository : ITripsRepository
         {
             _context.Trips.Remove(trip);
         }
-        _context.SaveChanges();
+        
+        await _context.SaveChangesAsync();
     }
 
     public async Task CreateTrip(Trip trip)

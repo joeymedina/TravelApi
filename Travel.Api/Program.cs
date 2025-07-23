@@ -8,6 +8,7 @@ using Travel.Infrastructure.Context;
 using Travel.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Http.Json;
 using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,10 +47,15 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 var app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
+var migrateAndSeed = true;
+if (migrateAndSeed)
 {
-    var context = scope.ServiceProvider.GetRequiredService<TripsDbContext>();
-    await TripsSeeder.SeedAsync(context);
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<TripsDbContext>();
+        await context.Database.MigrateAsync();
+        await TripsSeeder.SeedAsync(context);
+    }
 }
 
 if (app.Environment.IsDevelopment())
@@ -66,3 +72,5 @@ app.MapTripEndpoints();
 app.MapImageEndpoints();
 
 app.Run();
+
+public partial class Program {}

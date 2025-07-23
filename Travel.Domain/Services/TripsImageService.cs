@@ -22,19 +22,19 @@ public class TripsImageService(ITripsImageRepository tripsImageRepository) : ITr
         await _tripsImageRepository.CreateTripImage(tripImage);
     }
     
-    public void DeleteTripImage(string id)
+    public async Task DeleteTripImageAsync(string id)
     {
-        _tripsImageRepository.DeleteTripImage(id);
+        await _tripsImageRepository.DeleteTripImageAsync(id);
     }
 
-    public async Task DeleteTripImages(string id)
+    public async Task DeleteTripImagesAsync(string id)
     {
         var images = await GetTripImages(id);
         if (images != null)
         {
             foreach (var image in images)
             {
-                _tripsImageRepository.DeleteTripImage(image.Id);
+                await _tripsImageRepository.DeleteTripImageAsync(image.Id);
             }
         }
     }

@@ -22,9 +22,9 @@ public class TripsService(ITripsRepository tripsRepository) : ITripsService
         trip.EndDate = DateTime.SpecifyKind(trip.EndDate, DateTimeKind.Utc);
         await tripsRepository.CreateTrip(trip);
     }
-    public void DeleteTrip(string id)
+    public async Task DeleteTripAsync(string id)
     {
-        tripsRepository.DeleteTrip(id);
+        await tripsRepository.DeleteTripAsync(id);
     }
 
     public async Task UpdateTrip(Trip trip)
