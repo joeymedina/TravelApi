@@ -16,29 +16,30 @@ public class UploadTripImageUseCase(
 
     public async Task<(string Location, TripImage TripImage)> UploadTripImageAsync(string tripId, IFormFile file)
     {
+        var tripIdLower = tripId.ToLowerInvariant();
         //TODO: add retries if minio succeeds but database fails
         var objectName = file.FileName;
 
-        var exists = await _minioService.BucketExistsAsync(tripId);
+        var exists = await _minioService.BucketExistsAsync(tripIdLower);
         if (!exists)
         {
-            await _minioService.MakeBucketAsync(tripId);
-            await _minioService.SetBucketPolicyToPublicAsync(tripId);
+            await _minioService.MakeBucketAsync(tripIdLower);
+            await _minioService.SetBucketPolicyToPublicAsync(tripIdLower);
         }
 
         await using var stream = file.OpenReadStream();
-        await _minioService.PutObjectStreamAsync(tripId, objectName, stream, file);    
+        await _minioService.PutObjectStreamAsync(tripIdLower, objectName, stream, file);    
         
         var tripImage = new TripImage 
         { 
-            TripId = Guid.Parse(tripId), 
-            Url = $"http://localhost:9000/{tripId}/{file.FileName}",  
+            TripId = Guid.Parse(tripIdLower), 
+            Url = $"http://localhost:9000/{tripIdLower}/{file.FileName}",  
             Caption = ""
         };
         
         await _tripsImageService.CreateTripImage(tripImage);
         
-        var location = $"api/trips/{tripId}/images/{tripImage.Id}";
+        var location = $"api/trips/{tripIdLower}/images/{tripImage.Id}";
         return (location, tripImage);
     }
 }

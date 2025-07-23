@@ -1,3 +1,4 @@
+using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Minio;
@@ -81,10 +82,11 @@ internal static class TripHandlers
         // return TypedResults.Created("",trip);
     }
 
-    public static void DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
+    public static IResult DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
     {
         imageService.DeleteTripImages(id);
         tripsService.DeleteTrip(id);
+        return Results.NoContent();
         // var trip = await tripsService.GetTrip(id);
         // if (trip != null)
         // {

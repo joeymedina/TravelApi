@@ -58,7 +58,20 @@ public static class TripsSeeder
         await context.TripImages.AddRangeAsync(TripImages);
         await context.SaveChangesAsync();
     }
-    
+
+    public static async Task SeedTripImageToDelete(TripsDbContext context)
+    {
+        var tripImageToDelete = new TripImage
+        {
+            Id = Guid.Parse("40AAC809-C188-458D-A12E-1AFC92E2FEE2"),
+            Url = "http://google.com/myimage4.png",
+            Caption = "This is my fourth image",
+            TripId = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F")
+        };
+        
+        await context.TripImages.AddAsync(tripImageToDelete);
+        await context.SaveChangesAsync();
+    }
     public static async Task SeedRandomDataAsync(TripsDbContext context)
     {
         if (await context.Trips.AnyAsync())
