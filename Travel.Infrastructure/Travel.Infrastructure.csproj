@@ -7,18 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.AspNetCore.Http.Features">
-        <HintPath>..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.AspNetCore.Http.Features.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.Extensions.Configuration.Abstractions">
-        <HintPath>..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.Extensions.Configuration.Abstractions.dll</HintPath>
-      </Reference>
-      <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions">
-        <HintPath>..\..\..\..\..\usr\local\share\dotnet\shared\Microsoft.AspNetCore.App\8.0.8\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
       <PackageReference Include="bogus" Version="35.6.3" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.17" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.17">

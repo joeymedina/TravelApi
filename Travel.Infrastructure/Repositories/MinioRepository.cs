@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Http;
 using Minio;
 using Minio.DataModel.Args;
 using Minio.DataModel.Response;
