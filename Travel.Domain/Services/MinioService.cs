@@ -1,7 +1,7 @@
-using Microsoft.AspNetCore.Http;
 using Minio.DataModel.Response;
 using Minio.DataModel.Result;
 using Travel.Domain.Interfaces;
+using Travel.Model;
 
 namespace Travel.Domain.Services;
 
@@ -28,9 +28,9 @@ public class MinioService(IMinioRepository minioRepository) : IMinioService
         return await _minioRepository.PutObjectLocalAsync(bucketName, objectName, filePath, contentType);
     }
     
-    public async Task<PutObjectResponse> PutObjectStreamAsync(string bucketName, string objectName, Stream stream, IFormFile file)
+    public async Task<PutObjectResponse> PutObjectStreamAsync(string bucketName, string objectName, Stream stream, TripImageUploadDto fileDto)
     {
-        return await _minioRepository.PutObjectStreamAsync(bucketName, objectName, stream, file);
+        return await _minioRepository.PutObjectStreamAsync(bucketName, objectName, stream, fileDto);
     }
 
     public async Task<ListAllMyBucketsResult> ListBucketsAsync()
