@@ -2,6 +2,7 @@ using System.Data.Common;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Testcontainers.PostgreSql;
@@ -36,6 +37,16 @@ public class TravelWebApplicationFactory : WebApplicationFactory<Program>
     
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
+        builder.ConfigureAppConfiguration(settings =>
+        {
+            settings.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Minio:Endpoint"] = $"{minioContainer.Hostname}:{minioContainer.GetMappedPublicPort(MinioBuilder.MinioPort)}",
+                ["Minio:AccessKey"] = minioContainer.GetAccessKey(),
+                ["Minio:SecretKey"] = minioContainer.GetSecretKey()
+            });
+        });
+
         builder.ConfigureServices(services =>
         {
             services.Remove<TripsDbContext>();
