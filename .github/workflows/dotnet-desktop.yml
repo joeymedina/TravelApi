@@ -57,7 +57,7 @@ jobs:
 
     env:
       Solution_Name: TravelApi.sln                         # Replace with your solution name, i.e. MyWpfApp.sln.
-      Test_Project_Path: TravelApi.Test\TravelApi.Test.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
+      Test_Project_Path: TravelApi.Test/TravelApi.Test.csproj                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
 
     steps:
     - name: Checkout
@@ -70,7 +70,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-
     # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v2
@@ -78,6 +77,14 @@ jobs:
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test
+
+ #   # Add  MSBuild to the PATH: https://github.com/microsoft/setup-msbuild
+  #  - name: Setup MSBuild.exe
+   #   uses: microsoft/setup-msbuild@v2
+
+    # Execute all unit tests in the solution
+    #- name: Execute unit tests
+     # run: dotnet test
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
 #    - name: Restore the application
