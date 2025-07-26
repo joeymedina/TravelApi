@@ -2,7 +2,7 @@ using Minio.DataModel.Response;
 using Minio.DataModel.Result;
 using Travel.Model;
 
-namespace Travel.Domain.Interfaces;
+namespace Travel.Application.Interfaces;
 
 public interface IMinioRepository
 {

@@ -14,11 +14,12 @@
         <PrivateAssets>all</PrivateAssets>
       </PackageReference>
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.7" />
-      <PackageReference Include="Minio" Version="6.0.4" />
+      <PackageReference Include="Minio" Version="6.0.5" />
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.11" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Travel.Application\Travel.Application.csproj" />
       <ProjectReference Include="..\Travel.Domain\Travel.Domain.csproj" />
       <ProjectReference Include="..\Travel.Model\Travel.Model.csproj" />
     </ItemGroup>

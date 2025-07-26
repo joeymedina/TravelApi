@@ -1,9 +1,9 @@
 using Moq;
-using Travel.Domain.Interfaces;
-using Travel.Domain.Services;
+using Travel.Application.Interfaces;
+using Travel.Application.Services;
 using Travel.Model;
 using Guid = Travel.Domain.Extensions.Guid;
-namespace Travel.Test.UnitTests.Domain;
+namespace Travel.Test.UnitTests.Application;
 
 [TestClass]
 public class TripsServiceTests

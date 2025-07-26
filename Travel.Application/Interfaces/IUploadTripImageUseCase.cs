@@ -1,6 +1,6 @@
 using Travel.Model;
 
-namespace Travel.Domain.Interfaces;
+namespace Travel.Application.Interfaces;
 
 public interface IUploadTripImageUseCase
 {

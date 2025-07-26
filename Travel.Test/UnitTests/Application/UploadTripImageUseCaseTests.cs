@@ -1,14 +1,14 @@
 using System.Net;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Minio.DataModel.Response;
 using Moq;
-using Travel.Domain.Interfaces;
-using Travel.Domain.UseCases;
+using Travel.Application.Interfaces;
+using Travel.Application.UseCases;
 using Travel.Model;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
-namespace Travel.Test.UnitTests.Domain;
+namespace Travel.Test.UnitTests.Application;
 
 [TestClass]
 public class UploadTripImageUseCaseTests
