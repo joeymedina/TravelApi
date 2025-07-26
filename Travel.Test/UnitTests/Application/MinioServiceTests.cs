@@ -2,11 +2,11 @@ using System.Net;
 using Minio.DataModel.Response;
 using Minio.DataModel.Result;
 using Moq;
-using Travel.Domain.Interfaces;
-using Travel.Domain.Services;
+using Travel.Application.Interfaces;
+using Travel.Application.Services;
 using Travel.Model;
 
-namespace Travel.Test.UnitTests.Domain;
+namespace Travel.Test.UnitTests.Application;
 
 [TestClass]
 public class MinioServiceTests

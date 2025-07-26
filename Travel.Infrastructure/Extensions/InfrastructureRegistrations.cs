@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Minio;
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Infrastructure.Context;
 using Travel.Infrastructure.Repositories;
 using Travel.Model;

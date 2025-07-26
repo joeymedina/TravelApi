@@ -1,8 +1,8 @@
 using AutoMapper;
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Model;
 
-namespace Travel.Domain.UseCases;
+namespace Travel.Application.UseCases;
 
 public class UploadTripImageUseCase(
     IMinioService minioService,

@@ -1,7 +1,7 @@
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Model;
 
-namespace Travel.Domain.Services;
+namespace Travel.Application.Services;
 
 public class TripsService(ITripsRepository tripsRepository) : ITripsService
 {

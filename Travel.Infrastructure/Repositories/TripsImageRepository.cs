@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Infrastructure.Context;
 using Travel.Model;
 

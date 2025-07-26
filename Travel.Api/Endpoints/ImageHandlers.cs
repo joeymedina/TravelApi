@@ -1,11 +1,9 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Minio;
-using Minio.DataModel.Args;
 using Minio.DataModel.Response;
 using Travel.Api.DTOs;
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Model;
 
 

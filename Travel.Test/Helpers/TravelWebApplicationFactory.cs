@@ -8,7 +8,6 @@ using Minio;
 using Testcontainers.PostgreSql;
 using Travel.Infrastructure.Context;
 using Testcontainers.Minio;
-using Travel.Domain.Interfaces;
 
 namespace Travel.Test.Helpers;
 using Travel.Test.Extensions;

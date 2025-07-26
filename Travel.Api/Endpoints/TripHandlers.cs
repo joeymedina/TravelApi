@@ -3,7 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Minio;
 using Travel.Api.DTOs;
-using Travel.Domain.Interfaces;
+using Travel.Application.Interfaces;
 using Travel.Model;
 
 namespace Travel.Api.Endpoints;

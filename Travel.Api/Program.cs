@@ -1,14 +1,13 @@
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
 using Travel.Api;
 using Travel.Api.DTOs;
 using Travel.Api.Middleware;
 using Travel.Domain.Extensions;
 using Travel.Infrastructure.Context;
 using Travel.Infrastructure.Extensions;
-using Microsoft.AspNetCore.Http.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Travel.Application.Extensions;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,8 +16,9 @@ builder.Configuration.AddUserSecrets<Program>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddDomain();
+builder.Services.AddApplication();
 builder.Services.AddAutoMapper(typeof(TripProfile));
+builder.Services.AddDomain();
 builder.Services.Configure<FormOptions>(options =>
 {
     options.MultipartBodyLengthLimit = 268435456; // 256 MB limit
