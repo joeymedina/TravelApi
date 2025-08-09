@@ -1,39 +1,14 @@
-using System.Net;
 using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Minio;
-using Travel.Api.DTOs;
 using Travel.Application.Interfaces;
-using Travel.Model;
+using Travel.Domain.Entities;
+using Travel.Model.Trip;
 
 namespace Travel.Api.Endpoints;
 
 internal static class TripHandlers
 {
-    private static List<Trip> _trips = 
-        [
-            new Trip
-            {
-                Id = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F"),
-                Title = "First Trip To Vegas",
-                Location = "Las Vegas, Nevada",
-                StartDate = new DateTime(2025, 4, 17),
-                EndDate = new DateTime(2025, 4, 21),
-                Story = "Vegas was amazing",
-                Images = [],
-            },
-            new Trip
-            {
-                Id = Guid.Parse("2358D025-1796-4A99-B527-D59120930E25"),
-                Title = "Summer Lake",
-                Location = "Gravois Mills, MO",
-                StartDate = new DateTime(2025, 5, 23),
-                EndDate = new DateTime(2025, 5, 26),
-                Story = "I found my first artifact",
-                Images = [],
-            }
-        ];
-    
     public static async Task GetBuckets(IMinioClient minioClient)
     {
         var getListBucketsTask = await minioClient.ListBucketsAsync();
@@ -43,27 +18,29 @@ internal static class TripHandlers
         }
     }
 
-    public static List<Trip> GetTrips(ITripsService tripsService)
+    public static List<Trip> GetTrips(IMapper mapper, ITripsService tripsService)
     {
-        // return _trips;
-        return tripsService.GetTrips();
+        var tripEntities = tripsService.GetTrips();
+        var trips = mapper.Map<List<Trip>>(tripEntities);
+        
+        return trips;
     }
     
-    public static async Task<Trip?> GetTrip(string id, ITripsService tripsService)
+    public static async Task<Trip?> GetTrip(string id, IMapper mapper, ITripsService tripsService)
     {
-        return await tripsService.GetTrip(id);
-        return _trips.FirstOrDefault(x => x.Id.ToString().Equals(id, StringComparison.OrdinalIgnoreCase));
+        var tripEntity = await tripsService.GetTrip(id);
+        var trip = mapper.Map<Trip>(tripEntity);
+        return trip;
     }
 
-    public static async Task<Created<Trip>> PutTrip(string id, Trip trip, ITripsService tripsService)
+    public static async Task<Created<Trip>> PutTrip(string id, Trip trip, IMapper mapper, ITripsService tripsService)
     {
         var trip1 = await tripsService.GetTrip(id);
-        _trips.Remove(trip1);
-        _trips.Add(trip);
+        var tripEntity = mapper.Map<TripEntity>(trip);
         return TypedResults.Created("",trip);
     }
 
-    public static async Task<IResult> PatchTrip(string id, PatchTripDto dto, IMapper mapper, ITripsService tripsService)
+    public static async Task<IResult> PatchTrip(string id, TripUpdated dto, IMapper mapper, ITripsService tripsService)
     {
         var existingTrip = await tripsService.GetTrip(id);
         if (existingTrip == null)
@@ -73,13 +50,13 @@ internal static class TripHandlers
         await tripsService.UpdateTrip(existingTrip);
         return Results.NoContent();
     }
-    public static async Task<Created<Trip>> PostTrip(CreateTripDto tripDto, IMapper mapper, ITripsService tripsService)
+    public static async Task<Created<Trip>> PostTrip(TripCreated tripDto, IMapper mapper, ITripsService tripsService)
     {
-        var trip = mapper.Map<Trip>(tripDto);
-        await tripsService.CreateTrip(trip);
+        var tripEntity = mapper.Map<TripEntity>(tripDto);
+        await tripsService.CreateTrip(tripEntity);
+        var trip = mapper.Map<Trip>(tripEntity);
+        
         return TypedResults.Created($"api/trips/{trip.Id}", trip);
-        // _trips.Add(trip);
-        // return TypedResults.Created("",trip);
     }
 
     public static async Task<IResult> DeleteTrip(string id, ITripsService tripsService, ITripsImageService imageService)
@@ -87,10 +64,5 @@ internal static class TripHandlers
         await imageService.DeleteTripImagesAsync(id);
         await tripsService.DeleteTripAsync(id);
         return Results.NoContent();
-        // var trip = await tripsService.GetTrip(id);
-        // if (trip != null)
-        // {
-        //     _trips.Remove(trip);
-        // }
     }
 }
