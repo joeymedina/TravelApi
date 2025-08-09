@@ -1,12 +1,12 @@
-using Travel.Model;
+using Travel.Domain.Entities;
 
 namespace Travel.Application.Interfaces;
 
 public interface ITripsRepository
 {
-    public Task<Trip?> GetTrip(string id);
-    public List<Trip> GetTrips();
+    public Task<TripEntity?> GetTrip(string id);
+    public List<TripEntity> GetTrips();
     public Task DeleteTripAsync(string id);
-    public Task UpdateTrip(Trip trip);
-    public Task CreateTrip(Trip trip);
+    public Task UpdateTrip(TripEntity trip);
+    public Task CreateTrip(TripEntity trip);
 }

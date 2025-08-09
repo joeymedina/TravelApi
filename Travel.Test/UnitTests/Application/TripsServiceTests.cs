@@ -1,6 +1,7 @@
 using Moq;
 using Travel.Application.Interfaces;
 using Travel.Application.Services;
+using Travel.Domain.Entities;
 using Travel.Model;
 using Guid = Travel.Domain.Extensions.Guid;
 namespace Travel.Test.UnitTests.Application;
@@ -21,7 +22,7 @@ public class TripsServiceTests
     [TestMethod]
     public async Task GetTrip_ReturnsTrip_WhenFound()
     {
-        var trip = new Trip { Id = Guid.NewGuid(), Title = "Test Trip" };
+        var trip = new TripEntity { Id = Guid.NewGuid(), Title = "Test Trip" };
         _mockRepo.Setup(r => r.GetTrip(trip.Id.ToString())).ReturnsAsync(trip);
         var result = await _service.GetTrip(trip.Id.ToString());
         Assert.AreEqual(trip, result);
@@ -30,7 +31,7 @@ public class TripsServiceTests
     [TestMethod]
     public async Task GetTrip_ReturnsNull_WhenNotFound()
     {
-        _mockRepo.Setup(r => r.GetTrip(It.IsAny<string>())).ReturnsAsync((Trip?)null);
+        _mockRepo.Setup(r => r.GetTrip(It.IsAny<string>())).ReturnsAsync((TripEntity?)null);
         var result = await _service.GetTrip(Guid.NewGuidAsString());
         Assert.IsNull(result);
     }
@@ -38,7 +39,7 @@ public class TripsServiceTests
     [TestMethod]
     public void GetTrips_ReturnsListOfTrips()
     {
-        var trips = new List<Trip> { new Trip { Title = "Trip1" }, new Trip { Title = "Trip2" } };
+        var trips = new List<TripEntity> { new TripEntity { Title = "Trip1" }, new TripEntity { Title = "Trip2" } };
         _mockRepo.Setup(r => r.GetTrips()).Returns(trips);
         var result = _service.GetTrips();
         CollectionAssert.AreEqual(trips, result);
@@ -47,7 +48,7 @@ public class TripsServiceTests
     [TestMethod]
     public async Task CreateTrip_SetsDatesToUtc_AndCallsRepository()
     {
-        var trip = new Trip { Title = "Trip", StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
+        var trip = new TripEntity { Title = "Trip", StartDate = DateTime.Now, EndDate = DateTime.Now.AddDays(1) };
         _mockRepo.Setup(r => r.CreateTrip(trip)).Returns(Task.CompletedTask);
         await _service.CreateTrip(trip);
         Assert.AreEqual(DateTimeKind.Utc, trip.StartDate.Kind);
@@ -66,7 +67,7 @@ public class TripsServiceTests
     [TestMethod]
     public async Task UpdateTrip_CallsRepository()
     {
-        var trip = new Trip { Title = "Trip" };
+        var trip = new TripEntity { Title = "Trip" };
         _mockRepo.Setup(r => r.UpdateTrip(trip)).Returns(Task.CompletedTask);
         await _service.UpdateTrip(trip);
         _mockRepo.Verify(r => r.UpdateTrip(trip), Times.Once);

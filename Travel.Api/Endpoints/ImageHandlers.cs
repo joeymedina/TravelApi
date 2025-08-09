@@ -2,63 +2,38 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Minio.DataModel.Response;
-using Travel.Api.DTOs;
 using Travel.Application.Interfaces;
-using Travel.Model;
-
+using Travel.Domain.Entities;
+using Travel.Model.TripImage;
 
 namespace Travel.Api.Endpoints;
 
 internal static class ImageHandlers
 {
-    private static List<TripImage> _tripImages =
-    [
-        new TripImage
-        {
-            Id = Guid.Parse("10AAC809-C188-458D-A12E-1AFC92E2FEE3"),
-            Url = "http://google.com/myimage.png",
-            Caption = "This is my image",
-            TripId = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F")
-        },
-        new TripImage
-        {
-            Id = Guid.Parse("10AAC809-C188-458D-A12E-1AFC92E2FEE2"),
-            Url = "http://google.com/myimage2.png",
-            Caption = "This is my second image",
-            TripId = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F")
-        },
-        new TripImage
-        {
-            Id = Guid.Parse("9AD58C86-AF81-4B97-BEA5-0218E5DC9E9B"),
-            Url = "http://google.com/myimage3.png",
-            Caption = "This is my third image",
-            TripId = Guid.Parse("2358D025-1796-4A99-B527-D59120930E25")
-        }
-    ];
-
-    public static async Task<List<TripImage>?> GetImages(string id, ITripsImageService tripsImageService)
+    public static async Task<List<TripImage>?> GetImages(string id, IMapper mapper, ITripsImageService tripsImageService)
     {
-        return await tripsImageService.GetTripImages(id);
-        // var result = _tripImages.Where(x => x.TripId == Guid.Parse(id)).ToList();
-        // return result;
+        var tripImageEntities = await tripsImageService.GetTripImages(id);
+        var tripImages = mapper.Map<List<TripImage>>(tripImageEntities);
+        return tripImages;
     }
 
-    public static async Task<TripImage?> GetImage(string tripId, string id, ITripsImageService tripsImageService)
+    public static async Task<TripImage?> GetImage(string tripId, string id, IMapper mapper, ITripsImageService tripsImageService)
     {
-        // return  _tripImages.FirstOrDefault(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
-        return await tripsImageService.GetTripImage(tripId, id);
+        var tripImageEntity = await tripsImageService.GetTripImage(tripId, id);
+        var tripImage = mapper.Map<TripImage>(tripImageEntity);
+        return tripImage;
     }
     
-    public static async Task<Created<TripImage>> PostImage(string tripId, CreateTripImageDto tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
+    public static async Task<Created<TripImage>> PostImage(string tripId, TripImageCreated tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
     {
-        var tripImage = mapper.Map<TripImage>(tripImageDto);  
-        tripImage.TripId = Guid.Parse(tripId);
-        await tripsImageService.CreateTripImage(tripImage);
+        var tripImageEntity = mapper.Map<TripImageEntity>(tripImageDto);  
+        tripImageEntity.TripId = Guid.Parse(tripId);
+        await tripsImageService.CreateTripImage(tripImageEntity);
+        var tripImage = mapper.Map<TripImage>(tripImageEntity);
+        
         return TypedResults.Created($"api/trips/{tripId}/images/{tripImage.Id}", tripImage);
-        // _tripImages.Add(tripImage);
-        // return TypedResults.Created("", tripImage);
     }
-    public static async Task<IResult> PatchImage(string tripId, string id, PatchTripImageDto tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
+    public static async Task<IResult> PatchImage(string tripId, string id, TripImageUpdated tripImageDto, IMapper mapper, ITripsImageService tripsImageService)
     {
         var existingTripImage = await tripsImageService.GetTripImage(tripId, id);
         if (existingTripImage == null)
@@ -67,22 +42,14 @@ internal static class ImageHandlers
         mapper.Map(tripImageDto, existingTripImage); 
         await tripsImageService.UpdateTripImage(existingTripImage);
         return Results.NoContent();
-        // DeleteTripImage(tripId, id);
-        // _tripImages.Add(tripImage);
-        // return TypedResults.Created("",tripImage);
     }
     
     public static async Task DeleteTripImage(string tripId, string id, ITripsImageService tripImageService)
     {
         await tripImageService.DeleteTripImageAsync(id);
-        // var image = GetImage(tripId, id);
-        // if (image != null)
-        // {
-        //     _tripImages.Remove(image);
-        // }
     }
     
-    public static async Task<IResult> UploadImages([FromForm] IFormFileCollection files, string tripId, IUploadTripImageUseCase uploadTripImageUseCase)
+    public static async Task<IResult> UploadImages([FromForm] IFormFileCollection files, string tripId, IMapper mapper, IUploadTripImageUseCase uploadTripImageUseCase)
     {
         if (files == null || files.Count == 0)
             return Results.BadRequest("No file uploaded.");
@@ -91,17 +58,17 @@ internal static class ImageHandlers
 
         foreach (var file in files)
         {
-            var fileDto = new TripImageUploadDto
+            var fileDto = new TripImageUpload
             {
                 FileName = file.FileName,
                 ContentType = file.ContentType,
                 Content = await GetBytesAsync(file)
             };
             var result = await uploadTripImageUseCase.UploadTripImageAsync(tripId, fileDto);
-            if (result.TripImage != null)
-            {
-                uploadedImages.Add(result.TripImage);
-            }
+
+            var trip = mapper.Map<TripImage>(result.TripImage);
+            uploadedImages.Add(trip);
+
         }
         return TypedResults.Created("", uploadedImages);
         

@@ -1,14 +1,15 @@
 using Bogus;
 using Microsoft.EntityFrameworkCore;
+using Travel.Domain.Entities;
 using Travel.Model;
 
 namespace Travel.Infrastructure.Context;
 
 public static class TripsSeeder
 {
-    private static List<Trip> Trips = 
+    private static List<TripEntity> Trips = 
     [
-        new Trip
+        new TripEntity
         {
             Id = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F"),
             Title = "First Trip To Vegas",
@@ -17,7 +18,7 @@ public static class TripsSeeder
             EndDate = new DateTime(2025, 4, 21, 0,0,0, DateTimeKind.Utc),
             Story = "Vegas was amazing",
         },
-        new Trip
+        new TripEntity
         {
             Id = Guid.Parse("2358D025-1796-4A99-B527-D59120930E25"),
             Title = "Summer Lake",
@@ -28,23 +29,23 @@ public static class TripsSeeder
         }
     ];
 
-    private static List<TripImage> TripImages =
+    private static List<TripImageEntity> TripImages =
     [
-        new TripImage
+        new TripImageEntity
         {
             Id = Guid.Parse("10AAC809-C188-458D-A12E-1AFC92E2FEE3"),
             Url = "http://google.com/myimage.png",
             Caption = "This is my image",
             TripId = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F")
         },
-        new TripImage
+        new TripImageEntity
         {
             Id = Guid.Parse("10AAC809-C188-458D-A12E-1AFC92E2FEE2"),
             Url = "http://google.com/myimage2.png",
             Caption = "This is my second image",
             TripId = Guid.Parse("BB68B434-3026-41E1-B253-97BA308D764F")
         },
-        new TripImage
+        new TripImageEntity
         {
             Id = Guid.Parse("9AD58C86-AF81-4B97-BEA5-0218E5DC9E9B"),
             Url = "http://google.com/myimage3.png",
@@ -61,7 +62,7 @@ public static class TripsSeeder
 
     public static async Task SeedTripImageToDelete(TripsDbContext context)
     {
-        var tripImageToDelete = new TripImage
+        var tripImageToDelete = new TripImageEntity
         {
             Id = Guid.Parse("40AAC809-C188-458D-A12E-1AFC92E2FEE2"),
             Url = "http://google.com/myimage4.png",
@@ -79,13 +80,13 @@ public static class TripsSeeder
 
         var faker = new Faker("en");
 
-        var trips = new List<Trip>();
+        var trips = new List<TripEntity>();
 
         for (int i = 0; i < 5; i++)
         {
             var tripId = Guid.NewGuid();
 
-            var trip = new Trip
+            var trip = new TripEntity
             {
                 Id = tripId,
                 Title = faker.Lorem.Sentence(3),
@@ -93,12 +94,12 @@ public static class TripsSeeder
                 StartDate = faker.Date.Past(2).ToUniversalTime(),
                 EndDate = faker.Date.Recent().ToUniversalTime(),
                 Story = faker.Lorem.Paragraphs(2),
-                Images = new List<TripImage>()
+                Images = new List<TripImageEntity>()
             };
 
             for (int j = 0; j < faker.Random.Int(1, 4); j++)
             {
-                trip.Images.Add(new TripImage
+                trip.Images.Add(new TripImageEntity
                 {
                     Id = Guid.NewGuid(),
                     Url = faker.Image.PicsumUrl(),

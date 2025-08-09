@@ -5,6 +5,7 @@ using Moq;
 using Travel.Application.Interfaces;
 using Travel.Application.Services;
 using Travel.Model;
+using Travel.Model.TripImage;
 
 namespace Travel.Test.UnitTests.Application;
 
@@ -59,7 +60,7 @@ public class MinioServiceTests
     public async Task PutObjectStreamAsync_ReturnsRepositoryResult()
     {
         var response = new PutObjectResponse(HttpStatusCode.Accepted, "key", new Dictionary<string,string>(), 0, "contentMd5");
-        var mockFile = new Mock<TripImageUploadDto>();
+        var mockFile = new Mock<TripImageUpload>();
         var stream = new MemoryStream();
         _mockRepo.Setup(r => r.PutObjectStreamAsync("bucket", "object", stream, mockFile.Object)).ReturnsAsync(response);
         var result = await _service.PutObjectStreamAsync("bucket", "object", stream, mockFile.Object);

@@ -1,6 +1,6 @@
-namespace Travel.Api.DTOs;
+namespace Travel.Model.Trip;
 
-public class CreateTripDto
+public class TripCreated
 {
     public string Title { get; set; }
     public string Location { get; set; }

@@ -1,6 +1,6 @@
-namespace Travel.Model;
+namespace Travel.Domain.Entities;
 
-public class Trip
+public class TripEntity
 {
     public Guid Id { get; set; } = Guid.NewGuid();
     public string Title { get; set; }
@@ -8,5 +8,5 @@ public class Trip
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Story { get; set; } // Could be Markdown or HTML
-    public List<TripImage> Images { get; set; } = [];
+    public List<TripImageEntity> Images { get; set; } = [];
 }

@@ -1,14 +1,18 @@
 using AutoMapper;
-using Travel.Model;
+using Travel.Domain.Entities;
+using Travel.Model.Trip;
+using Travel.Model.TripImage;
 
 namespace Travel.Api.DTOs;
 public class TripProfile : Profile
 {
     public TripProfile()
     {
-        CreateMap<CreateTripDto, Trip>();
-        CreateMap<CreateTripImageDto, TripImage>();
-        CreateMap<PatchTripDto, Trip>()
+        CreateMap<TripEntity, Trip>();
+        CreateMap<TripImageEntity, TripImage>();
+        CreateMap<TripCreated, TripEntity>();
+        CreateMap<TripImageCreated, TripImageEntity>();
+        CreateMap<TripUpdated, TripEntity>()
             .ForAllMembers(opt => opt.Condition((src, dest, srcMember) =>
             {
                 // Skip nulls
@@ -21,7 +25,7 @@ public class TripProfile : Profile
                 return true;
             }));
         
-        CreateMap<PatchTripImageDto, TripImage>()
+        CreateMap<TripImageUpdated, TripImageEntity>()
             .ForAllMembers(opt =>
                 opt.Condition((src, dest, srcMember, destMember, context) =>
                 {

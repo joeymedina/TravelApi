@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Travel.Application.Interfaces;
+using Travel.Domain.Entities;
 using Travel.Infrastructure.Context;
-using Travel.Model;
 
 namespace Travel.Infrastructure.Repositories;
 
@@ -9,7 +9,7 @@ public class TripsImageRepository(TripsDbContext context) : ITripsImageRepositor
 {
     TripsDbContext _context = context;
     
-    public async Task<List<TripImage>?> GetTripImages(string id)
+    public async Task<List<TripImageEntity>?> GetTripImages(string id)
     {
         var images = _context.TripImages.Where(x => x.TripId == Guid.Parse(id));
 
@@ -21,7 +21,7 @@ public class TripsImageRepository(TripsDbContext context) : ITripsImageRepositor
         return null;
     }
     
-    public async Task<TripImage?> GetTripImage(string tripId, string id)
+    public async Task<TripImageEntity?> GetTripImage(string tripId, string id)
     {
         var image = _context.TripImages.Where(x => x.TripId == Guid.Parse(tripId) && x.Id == Guid.Parse(id));
         if (image.Any())
@@ -32,7 +32,7 @@ public class TripsImageRepository(TripsDbContext context) : ITripsImageRepositor
         return null;
     }
 
-    public async Task CreateTripImage(TripImage tripImage)
+    public async Task CreateTripImage(TripImageEntity tripImage)
     {
         var tripExists = await _context.Trips.AnyAsync(t => t.Id == tripImage.TripId);
         if (!tripExists)
@@ -58,7 +58,7 @@ public class TripsImageRepository(TripsDbContext context) : ITripsImageRepositor
         await DeleteTripImageAsync(tripImageId);
     }
     
-    public async Task UpdateTripImage(TripImage tripImage)
+    public async Task UpdateTripImage(TripImageEntity tripImage)
     {
         _context.TripImages.Update(tripImage);
         await _context.SaveChangesAsync();
