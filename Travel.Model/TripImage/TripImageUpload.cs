@@ -1,6 +1,6 @@
-namespace Travel.Model
+namespace Travel.Model.TripImage
 {
-    public class TripImageUploadDto
+    public class TripImageUpload
     {
         public string FileName { get; set; } = string.Empty;
         public string ContentType { get; set; } = string.Empty;

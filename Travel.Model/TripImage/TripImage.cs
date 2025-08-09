@@ -1,7 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
-
-namespace Travel.Model;
+namespace Travel.Model.TripImage;
 
 public class TripImage
 {
@@ -9,5 +6,5 @@ public class TripImage
     public string Url { get; set; }
     public string Caption { get; set; }
     public Guid TripId { get; set; }
-    public Trip Trip { get; set; }   // Navigation property
+    public Trip.Trip Trip { get; set; }   // Navigation property
 }

@@ -1,6 +1,6 @@
-namespace Travel.Api.DTOs;
+namespace Travel.Model.TripImage;
 
-public class CreateTripImageDto
+public class TripImageCreated
 {
     public string Url { get; set; }
     public string Caption { get; set; }

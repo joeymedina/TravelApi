@@ -1,8 +1,6 @@
-using Travel.Model;
+namespace Travel.Model.TripImage;
 
-namespace Travel.Api.DTOs;
-
-public class PatchTripImageDto
+public class TripImageUpdated
 {
     public string? Url { get; set; }
     public string? Caption { get; set; }

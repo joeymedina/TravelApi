@@ -1,8 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using System.Text;
-using Travel.Api.DTOs;
-using Travel.Model;
+using Travel.Model.TripImage;
 
 namespace Travel.Test.IntegrationTests;
 
@@ -53,7 +51,7 @@ public class ImageHandlersTests : TestBase
     public async Task PostImage_ShouldCreateImage_WhenValidDataProvided()
     {
         var tripId = "BB68B434-3026-41E1-B253-97BA308D764F";
-        var newImage = new CreateTripImageDto
+        var newImage = new TripImageCreated()
         {
             Url = "http://example.com/newimage.png",
             Caption = "New Image Caption"
@@ -84,7 +82,7 @@ public class ImageHandlersTests : TestBase
         var tripId = "2358D025-1796-4A99-B527-D59120930E25";
         var imageId = "9AD58C86-AF81-4B97-BEA5-0218E5DC9E9B";
         
-        var updatedImage = new PatchTripImageDto
+        var updatedImage = new TripImageUpdated()
         {
             Caption = "Updated Image Caption"
         };

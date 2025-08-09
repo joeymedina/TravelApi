@@ -1,13 +1,13 @@
-using Travel.Model;
+using Travel.Domain.Entities;
 
 namespace Travel.Application.Interfaces;
 
 public interface ITripsImageService
 {
-    public Task<List<TripImage>?> GetTripImages(string id);
-    public Task<TripImage?> GetTripImage(string tripId, string id);
-    public Task CreateTripImage(TripImage tripImage);
+    public Task<List<TripImageEntity>?> GetTripImages(string id);
+    public Task<TripImageEntity?> GetTripImage(string tripId, string id);
+    public Task CreateTripImage(TripImageEntity tripImage);
     public Task DeleteTripImageAsync(string id);
     public Task DeleteTripImagesAsync(string id);
-    public Task UpdateTripImage(TripImage trip);
+    public Task UpdateTripImage(TripImageEntity trip);
 }

@@ -1,21 +1,22 @@
 using Travel.Application.Interfaces;
+using Travel.Domain.Entities;
 using Travel.Model;
 
 namespace Travel.Application.Services;
 
 public class TripsService(ITripsRepository tripsRepository) : ITripsService
 {
-    public async Task<Trip?> GetTrip(string id)
+    public async Task<TripEntity?> GetTrip(string id)
     {
         return await tripsRepository.GetTrip(id);
     }
 
-    public List<Trip> GetTrips()
+    public List<TripEntity> GetTrips()
     {
         return tripsRepository.GetTrips();
     }
 
-    public async Task CreateTrip(Trip trip)
+    public async Task CreateTrip(TripEntity trip)
     {
         //TODO: change startdate and enddate to DateTimeOffset type
         trip.StartDate = DateTime.SpecifyKind(trip.StartDate, DateTimeKind.Utc);
@@ -27,7 +28,7 @@ public class TripsService(ITripsRepository tripsRepository) : ITripsService
         await tripsRepository.DeleteTripAsync(id);
     }
 
-    public async Task UpdateTrip(Trip trip)
+    public async Task UpdateTrip(TripEntity trip)
     {
         //TODO: change startdate and enddate to DateTimeOffset type
         trip.StartDate = DateTime.SpecifyKind(trip.StartDate, DateTimeKind.Utc);

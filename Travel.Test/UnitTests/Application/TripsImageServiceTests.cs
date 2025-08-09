@@ -1,8 +1,10 @@
 using Moq;
 using Travel.Application.Interfaces;
 using Travel.Application.Services;
+using Travel.Domain.Entities;
 using Travel.Model;
 using Guid = Travel.Domain.Extensions.Guid;
+
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 
 namespace Travel.Test.UnitTests.Application;
@@ -24,7 +26,7 @@ public class TripsImageServiceTests
     public async Task GetTripImages_ReturnsImages()
     {
         var tripId = Guid.NewGuidAsString();
-        var images = new List<TripImage> { new TripImage { Id = Guid.NewGuid() }, new TripImage { Id = Guid.NewGuid() } };
+        var images = new List<TripImageEntity> { new TripImageEntity { Id = Guid.NewGuid() }, new TripImageEntity { Id = Guid.NewGuid() } };
         _mockRepo.Setup(r => r.GetTripImages(tripId)).ReturnsAsync(images);
         var result = await _service.GetTripImages(tripId);
         CollectionAssert.AreEqual(images, result);
@@ -33,7 +35,7 @@ public class TripsImageServiceTests
     [TestMethod]
     public async Task GetTripImage_ReturnsImage()
     {
-        var image = new TripImage { Id = Guid.NewGuid() };
+        var image = new TripImageEntity { Id = Guid.NewGuid() };
         var tripId = Guid.NewGuidAsString();
         var imageId = image.Id.ToString();
         _mockRepo.Setup(r => r.GetTripImage(tripId, imageId)).ReturnsAsync(image);
@@ -44,7 +46,7 @@ public class TripsImageServiceTests
     [TestMethod]
     public async Task CreateTripImage_CallsRepository()
     {
-        var image = new TripImage { Id = Guid.NewGuid() };
+        var image = new TripImageEntity { Id = Guid.NewGuid() };
         _mockRepo.Setup(r => r.CreateTripImage(image)).Returns(Task.CompletedTask);
         await _service.CreateTripImage(image);
         _mockRepo.Verify(r => r.CreateTripImage(image), Times.Once);
@@ -63,7 +65,7 @@ public class TripsImageServiceTests
     public async Task DeleteTripImages_DeletesAllImages()
     {
         var tripId = Guid.NewGuidAsString();
-        var images = new List<TripImage> { new TripImage { Id = Guid.NewGuid() }, new TripImage { Id = Guid.NewGuid() } };
+        var images = new List<TripImageEntity> { new TripImageEntity { Id = Guid.NewGuid() }, new TripImageEntity { Id = Guid.NewGuid() } };
         _mockRepo.Setup(r => r.GetTripImages(tripId)).ReturnsAsync(images);
         await _service.DeleteTripImagesAsync(tripId);
         _mockRepo.Verify(r => r.DeleteTripImageAsync(It.Is<string>(id => id == images[0].Id.ToString() || id == images[1].Id.ToString())), Times.Exactly(2));
@@ -72,7 +74,7 @@ public class TripsImageServiceTests
     [TestMethod]
     public async Task UpdateTripImage_CallsRepository()
     {
-        var image = new TripImage { Id = Guid.NewGuid() };
+        var image = new TripImageEntity { Id = Guid.NewGuid() };
         _mockRepo.Setup(r => r.UpdateTripImage(image)).Returns(Task.CompletedTask);
         await _service.UpdateTripImage(image);
         _mockRepo.Verify(r => r.UpdateTripImage(image), Times.Once);

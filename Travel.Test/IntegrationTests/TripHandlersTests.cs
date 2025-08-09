@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
-using Travel.Api.DTOs;
-using Travel.Model;
+using Travel.Model.Trip;
 
 namespace Travel.Test.IntegrationTests;
 
@@ -31,7 +30,7 @@ public class TripHandlersTests : TestBase
     [TestMethod]
     public async Task PostTrip_Should_CreateTrip()
     {
-        CreateTripDto createTripDto = new CreateTripDto
+        TripCreated createTripDto = new TripCreated
         {
             Title = "Test Trip",
             Location = "Test Location",
@@ -58,7 +57,7 @@ public class TripHandlersTests : TestBase
     [TestMethod]
     public async Task PatchTrip_Should_Return404_WhenInvalidTripId()
     {
-        PatchTripDto patchTrip = new PatchTripDto
+        TripUpdated patchTrip = new TripUpdated
         {
             Title = "Test Trip",
         }; 
@@ -72,7 +71,7 @@ public class TripHandlersTests : TestBase
     [TestMethod]
     public async Task PatchTrip_Should_UpdateTripWhenValid()
     {
-        PatchTripDto patchTrip = new PatchTripDto
+        TripUpdated patchTrip = new TripUpdated
         {
             Title = "Updated Trip",
             Story = "Updated story"
@@ -100,7 +99,7 @@ public class TripHandlersTests : TestBase
         Assert.IsNull(content, "Expected empty content for deleted trip");
     }
     
-    private static void AssertTripsAreEqual(Trip trip, CreateTripDto createTripDto)
+    private static void AssertTripsAreEqual(Trip trip, TripCreated createTripDto)
     {
         Assert.AreEqual(createTripDto.Title, trip?.Title);
         Assert.AreEqual(createTripDto.Location, trip?.Location);
@@ -109,7 +108,7 @@ public class TripHandlersTests : TestBase
         Assert.AreEqual(createTripDto.Story, trip?.Story);
     }
 
-    private static void AssertTripsAreEqual(Trip trip, PatchTripDto patchTripDto)
+    private static void AssertTripsAreEqual(Trip trip, TripUpdated patchTripDto)
     {
         if (patchTripDto.Title != null)
             Assert.AreEqual(patchTripDto.Title, trip?.Title);

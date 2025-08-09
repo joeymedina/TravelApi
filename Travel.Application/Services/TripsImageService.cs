@@ -1,4 +1,5 @@
 using Travel.Application.Interfaces;
+using Travel.Domain.Entities;
 using Travel.Model;
 
 namespace Travel.Application.Services;
@@ -7,17 +8,17 @@ public class TripsImageService(ITripsImageRepository tripsImageRepository) : ITr
 {
     ITripsImageRepository _tripsImageRepository = tripsImageRepository;
 
-    public async Task<List<TripImage>?> GetTripImages(string id)
+    public async Task<List<TripImageEntity>?> GetTripImages(string id)
     {
        return await _tripsImageRepository.GetTripImages(id);
     }
 
-    public async Task<TripImage?> GetTripImage(string tripId, string id)
+    public async Task<TripImageEntity?> GetTripImage(string tripId, string id)
     {
         return await _tripsImageRepository.GetTripImage(tripId, id);
     }
 
-    public async Task CreateTripImage(TripImage tripImage)
+    public async Task CreateTripImage(TripImageEntity tripImage)
     {
         await _tripsImageRepository.CreateTripImage(tripImage);
     }
@@ -38,7 +39,7 @@ public class TripsImageService(ITripsImageRepository tripsImageRepository) : ITr
             }
         }
     }
-    public async Task UpdateTripImage(TripImage tripImage)
+    public async Task UpdateTripImage(TripImageEntity tripImage)
     {
         await _tripsImageRepository.UpdateTripImage(tripImage);
     }
