@@ -47,7 +47,7 @@ builder.Services.Configure<JsonOptions>(options =>
 });
 var app = builder.Build();
 
-var migrateAndSeed = true;
+var migrateAndSeed = false;
 if (migrateAndSeed)
 {
     using (var scope = app.Services.CreateScope())

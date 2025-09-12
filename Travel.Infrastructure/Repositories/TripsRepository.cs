@@ -23,7 +23,7 @@ public class TripsRepository : ITripsRepository
     
     public List<TripEntity>  GetTrips()
     {
-        return _context.Trips.ToList();
+        return _context.Trips.Include(t => t.Images).ToList();
     }
 
     public async Task DeleteTripAsync(string id)
