@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using Travel.Infrastructure;
 using Travel.Infrastructure.Context;
 
 #nullable disable
@@ -13,7 +12,7 @@ using Travel.Infrastructure.Context;
 namespace Travel.Infrastructure.Migrations
 {
     [DbContext(typeof(TripsDbContext))]
-    [Migration("20250621025544_Initial")]
+    [Migration("20250809050619_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -26,7 +25,7 @@ namespace Travel.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Travel.Model.Trip", b =>
+            modelBuilder.Entity("Travel.Domain.Entities.TripEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -55,7 +54,7 @@ namespace Travel.Infrastructure.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("Travel.Model.TripImage", b =>
+            modelBuilder.Entity("Travel.Domain.Entities.TripImageEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -79,9 +78,9 @@ namespace Travel.Infrastructure.Migrations
                     b.ToTable("TripImages");
                 });
 
-            modelBuilder.Entity("Travel.Model.TripImage", b =>
+            modelBuilder.Entity("Travel.Domain.Entities.TripImageEntity", b =>
                 {
-                    b.HasOne("Travel.Model.Trip", "Trip")
+                    b.HasOne("Travel.Domain.Entities.TripEntity", "Trip")
                         .WithMany("Images")
                         .HasForeignKey("TripId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -90,7 +89,7 @@ namespace Travel.Infrastructure.Migrations
                     b.Navigation("Trip");
                 });
 
-            modelBuilder.Entity("Travel.Model.Trip", b =>
+            modelBuilder.Entity("Travel.Domain.Entities.TripEntity", b =>
                 {
                     b.Navigation("Images");
                 });
