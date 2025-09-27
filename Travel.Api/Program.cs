@@ -7,6 +7,7 @@ using Travel.Infrastructure.Context;
 using Travel.Infrastructure.Extensions;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Travel.Application.Extensions;
 using JsonOptions = Microsoft.AspNetCore.Http.Json.JsonOptions;
 
@@ -14,7 +15,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddUserSecrets<Program>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("OpenApiSpec", new OpenApiInfo
+    {
+        Title = "Travel API",
+        Version = "v1",
+        Description = "API for managing trips and images",
+    });
+});
+builder.Services.AddOpenApiDocument();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddApplication();
 builder.Services.AddAutoMapper(typeof(TripProfile));
@@ -46,23 +56,13 @@ builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
 });
 var app = builder.Build();
-
-var migrateAndSeed = false;
-if (migrateAndSeed)
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var context = scope.ServiceProvider.GetRequiredService<TripsDbContext>();
-        await context.Database.MigrateAsync();
-        await TripsSeeder.SeedAsync(context);
-    }
-}
+app.UseOpenApi();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseSwagger();
 
 // app.UseCors("AllowLocalhost");
 app.UseCors("AllowFrontend");

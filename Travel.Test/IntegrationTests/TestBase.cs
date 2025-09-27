@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Travel.Infrastructure.Context;
 using Travel.Test.Helpers;
@@ -21,8 +22,17 @@ public class TestBase
         context.WriteLine($"Minio Connections: {factory.minioContainer.GetConnectionString()}");
         
         client = factory.CreateClient();
+        
+        await MigrateAndSeed();
     }
 
+    private static async Task MigrateAndSeed()
+    {
+        using var scope = factory.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<TripsDbContext>();
+        await context.Database.MigrateAsync();
+        await TripsSeeder.SeedAsync(context);
+    }
     public static async Task AddTripImageToDelete()
     {
         using var scope = factory.Services.CreateScope();
