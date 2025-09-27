@@ -14,6 +14,11 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="NSwag.AspNetCore" Version="14.6.0" />
+        <PackageReference Include="NSwag.MSBuild" Version="14.6.0">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
 
@@ -23,12 +28,13 @@
       <ProjectReference Include="..\Travel.Model\Travel.Model.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
+<!--    <Target Name="NSwag" AfterTargets="Build">-->
+<!--        <Exec EnvironmentVariables="ASPNETCORE_ENVIRONMENT=Development" -->
+<!--              Command="$(NSwagExe_Net80) aspnetcore2openapi /NoBuild:true /Output:$(OutputPath)swagger.json" />-->
+<!--        <Exec Command="$(NSwagExe_Net80) openapi2csclient /input:$(OutputPath)swagger.json /output:TravelModels.cs /namespace:Travel.Client.Models /GenerateClientClasses:false /GenerateDtoTypes:true" />-->
+<!--        <Exec Command="$(NSwagExe_Net80) openapi2csclient /input:$(OutputPath)swagger.json /output:TravelClient.cs /namespace:Travel.Client /GenerateClientClasses:true /GenerateDtoTypes:false /AdditionalNamespaceUsages:Travel.Client.Models" />-->
+<!--  -->
+<!--    </Target>-->
     <Target Name="PostBuild" AfterTargets="PostBuildEvent">
       <Exec Command="sh postbuild.sh" />
     </Target>
